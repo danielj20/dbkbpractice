@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Knowledge Bowl Database</title>
+        <script src="https://kit.fontawesome.com/9d9b1c2a48.js" crossorigin="anonymous"></script>
+        <!-- Latest compiled and minified CSS -->
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+
+        <!-- Latest compiled JavaScript -->
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+    </head>
+
+    <body>
+        <div id="full-container" class="container-md pt-5">
+            <h1>Knowledge Bowl Database</h1>
+            <div class="input-group mb-3">
+                <input type="text" class="form-control" id="searchInput" placeholder="Search database" aria-label="Answer question" aria-describedby="basic-addon2">
+                <div class="input-group-append">
+                  <button class="btn btn-primary" type="submit" data-toggle="tooltip" data-placement="top" title="Submit your search term" onclick="search()">Search</button>
+                </div>
+            </div>
+            <button class="btn btn-secondary" onclick="random()">Random</button>
+            <div id="results">
+                    
+            </div>
+        </div>
+    </body>
+    <script>
+        function search() {
+            var term = document.getElementById("searchInput").value;
+            var questionsDiv = document.getElementById("results");
+            var results = [];
+            questionsDiv.innerText = "";
+            var url = 'https://eduria.org/KBAPI/search/?q=' + term;
+            function capitalizeFirst(string) {
+                return string.charAt(0).toUpperCase() + string.slice(1);
+            }
+            var xhr = new XMLHttpRequest();
+            xhr.open("GET", url);
+            xhr.send();
+            xhr.onreadystatechange = function() {
+                if (this.readyState == 4 && this.status == 200) {
+                    results = JSON.parse(this.responseText);
+                    for (var i = 0; i < results.length; i++) {
+                        var questionDiv = document.createElement("div");
+                        questionDiv.classList.add("border");
+                        questionDiv.classList.add("my-3");
+                        questionDiv.classList.add("p-3");
+                        questionDiv.classList.add("rounded");
+                        var subject = document.createElement("h5");
+                        subject.innerText = results[i]["Subject"];
+                        console.log(results[i]["Subject"]);
+                        var question = document.createElement("p");
+                        question.innerText = results[i]["Question"];
+                        var answer = document.createElement("b");
+                        answer.innerText = results[i]["Answer"];
+                        questionDiv.appendChild(subject);
+                        questionDiv.appendChild(question);
+                        questionDiv.appendChild(answer);
+                        questionsDiv.appendChild(questionDiv);
+                    }
+                    questionsDiv.innerHTML = questionsDiv.innerHTML.replaceAll(term, "<b>" + term + "</b>");
+                    questionsDiv.innerHTML = questionsDiv.innerHTML.replaceAll(capitalizeFirst(term), "<b>" + capitalizeFirst(term) + "</b>");
+                }
+            };
+        }
+
+        function random() {
+            var term = document.getElementById("searchInput").value;
+            var questionsDiv = document.getElementById("results");
+            var results = [];
+            questionsDiv.innerText = "";
+            var url = 'https://eduria.org/KBAPI/random/?num=10';
+
+            var xhr = new XMLHttpRequest();
+            xhr.open("GET", url);
+            xhr.send();
+            xhr.onreadystatechange = function() {
+                if (this.readyState == 4 && this.status == 200) {
+                    results = JSON.parse(this.responseText);
+                    for (var i = 0; i < results.length; i++) {
+                        var questionDiv = document.createElement("div");
+                        questionDiv.classList.add("border");
+                        questionDiv.classList.add("my-3");
+                        questionDiv.classList.add("p-3");
+                        questionDiv.classList.add("rounded");
+                        var subject = document.createElement("h5");
+                        subject.innerText = results[i]["Subject"];
+                        console.log(results[i]["Subject"]);
+                        var question = document.createElement("p");
+                        question.innerText = results[i]["Question"];
+                        var answer = document.createElement("b");
+                        answer.innerText = results[i]["Answer"];
+                        questionDiv.appendChild(subject);
+                        questionDiv.appendChild(question);
+                        questionDiv.appendChild(answer);
+                        questionsDiv.appendChild(questionDiv);
+                    }
+                }
+            };
+        }
+    </script>
+</html>
