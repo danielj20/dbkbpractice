@@ -8,10 +8,42 @@
 
         <!-- Latest compiled JavaScript -->
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
     </head>
 
     <body>
+        <nav class="navbar navbar-expand-md navbar-dark bg-dark mb-4">
+            <div class="container-fluid">
+              <a class="navbar-brand" href="#">Knowledge Bowl Practice</a>
+              <button class="navbar-toggler collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+              </button>
+              <div class="navbar-collapse collapse" id="navbarCollapse">
+                <ul class="navbar-nav me-auto mb-2 mb-md-0">
+                  <li class="nav-item">
+                    <a class="nav-link" aria-current="page" href="https://kbpractice.com">Home</a>
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link" href="https://online.kbpractice.com">Multiplayer</a>
+                  </li>
+                  <li class="nav-item">
+                      <a class="nav-link active" href="https://db.kbpractice.com">Access Database</a>
+                  </li>
+                  <li class="nav-item">
+                      <a class="nav-link" href="https://en.wikipedia.org/wiki/Knowledge_Bowl">Learn more</a>
+                  </li>
+                </ul>
+                <form class="d-flex">
+                  <div class="input-group">
+                      <input type="text" class="form-control" id="searchInputTop" placeholder="Search database" aria-label="Answer question" aria-describedby="basic-addon2">
+                      <div class="input-group-append">
+                        <button class="btn btn-primary" type="button" data-toggle="tooltip" data-placement="top" title="Submit your search term" onclick="location.replace('https://db.kbpractice.com/?q=' + document.getElementById('searchInputTop').value);">Search</button>
+                      </div>
+                  </div>
+                </form>
+                
+              </div>
+            </div>
+          </nav>
         <div id="full-container" class="container-md pt-5">
             <h1>Knowledge Bowl Database</h1>
             <div class="input-group mb-3">
@@ -27,6 +59,12 @@
         </div>
     </body>
     <script>
+        var urlParams = new URLSearchParams(window.location.search);
+        var term = urlParams.get('q');
+        if(term!==null) {
+            document.getElementById("searchInput").value = term;
+            search();
+        }
         function search() {
             var term = document.getElementById("searchInput").value;
             var questionsDiv = document.getElementById("results");
@@ -34,8 +72,8 @@
             questionsDiv.innerText = "";
             var url = 'https://eduria.org/KBAPI/search/?q=' + term;
             function capitalizeFirst(string) {
-                return string.charAt(0).toUpperCase() + string.slice(1);
-            }
+                return string.replace(/(?:^|\s)\S/g, function(a) { return a.toUpperCase(); });
+            };
             var xhr = new XMLHttpRequest();
             xhr.open("GET", url);
             xhr.send();
@@ -71,6 +109,7 @@
             var questionsDiv = document.getElementById("results");
             var results = [];
             questionsDiv.innerText = "";
+            document.getElementById("searchInput").value = "";
             var url = 'https://eduria.org/KBAPI/random/?num=10';
 
             var xhr = new XMLHttpRequest();
