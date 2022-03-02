@@ -64,6 +64,8 @@
         if(term!==null) {
             document.getElementById("searchInput").value = term;
             search();
+        } else {
+            random();
         }
         function search() {
             var term = document.getElementById("searchInput").value;
